@@ -1,0 +1,35 @@
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext('2d');
+
+Create a rectangle : 
+ctx.fillStyle = 'white';
+ctx.fillRect(10, 10, 10, 10);
+
+Fixe resize problems when canvas width or height changes : 
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+window.addEventListener('resize', () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  ctx.fillStyle = 'red';
+  ctx.fillRect(0, 0, 200, 200);
+})
+If you paste this and resize your canvas, now your red square will be 
+exactly the same.
+
+
+Create circle :
+ctx.fillStyle = 'red';
+ctx.beginPath();
+ctx.arc(100, 100, 50, 0, Math.PI * 2);
+      centerX, centerY, radius, startAngle, endAngle;
+ctx.fill();
+
+Circle white border : 
+ctx.fillStyle = 'red';
+ctx.strokeStyle = 'white';
+ctx.lineWidth = 12;
+ctx.beginPath();
+ctx.arc(100, 100, 50, 0, Math.PI * 2);
+ctx.stroke();
+ctx.fill();
