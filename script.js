@@ -15,33 +15,41 @@ window.addEventListener('resize', () => {
 canvas.addEventListener('click', (event) => {
   mouse.x = event.x;
   mouse.y = event.y;
-  for(let i = 0; i < 10; i++) {
-    particlesArray.push(new Particle());
+  for(let i = 0; i < 1; i++) {
+    particlesArray.push(new Particle(mouse.x, mouse.y));
   }
 });
 canvas.addEventListener('mousemove', (event) => {
   mouse.x = event.x;
   mouse.y = event.y;
-  for(let i = 0; i < 10; i++) {
-    particlesArray.push(new Particle());
-  }
+  // for(let i = 0; i < 10; i++) {
+  //   particlesArray.push(new Particle());
+  // }
 
 });
 
 
 class Particle {
-  constructor() {
-    this.x = mouse.x;
-    this.y = mouse.y;
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
     this.size = Math.random() * 17;
     this.speedX = Math.random() * 3 - 1.5;
     this.speedY = Math.random() * 3 -1.5;
     this.color = `hsl(${hue}, 100%, 50%)`
   }
   update() {
+    if(this.x <= 0 + this.size 
+      || this.x >= canvas.width - this.size) {
+      this.speedX = this.speedX * - 1;
+    }
+    if(this.y <= 0 + this.size 
+      || this.y >= canvas.height - this.size) {
+      this.speedY = this.speedY * - 1;
+    }
     this.x += this.speedX;
     this.y += this.speedY;
-    if(this.size > 0.2) this.size -= 0.1;
+    // if(this.size > 0.2) this.size -= 0.1;
   }
   draw() {
     ctx.fillStyle = this.color;
@@ -51,8 +59,11 @@ class Particle {
   }
 }
 function init() {
-  for (let i = 0; i < 100; i++) {
-    particlesArray.push(new Particle());
+  for (let i = 0; i < 30; i++) {
+    hue += 2;
+    const x = (Math.random() * canvas.width - 50) + 50;
+    const y = (Math.random() * canvas.height - 50) + 50;
+    particlesArray.push(new Particle(x, y));
   }
 }
 function handleParticles() {
@@ -63,7 +74,7 @@ function handleParticles() {
       const dx = particlesArray[i].x - particlesArray[j].x;
       const dy = particlesArray[i].y - particlesArray[j].y;
       const distance = Math.sqrt(dx * dx + dy * dy);
-      if(distance < 100) {
+      if(distance < 200) {
         ctx.beginPath();
         ctx.strokeStyle = particlesArray[i].color;
         // ctx.lineWidth = particlesArray[i].size / 10;
@@ -90,7 +101,7 @@ function animate() {
   hue += 2;
   requestAnimationFrame(animate);
 }
-
+init();
 animate();
 
 
