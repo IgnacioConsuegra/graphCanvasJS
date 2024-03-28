@@ -15,25 +15,25 @@ window.addEventListener('resize', () => {
 canvas.addEventListener('click', (event) => {
   mouse.x = event.x;
   mouse.y = event.y;
-  for(let i = 0; i < 10; i++) {
-    particlesArray.push(new Particle());
-  }
+  // for(let i = 0; i < 10; i++) {
+  //   particlesArray.push(new Particle());
+  // }
 });
 canvas.addEventListener('mousemove', (event) => {
   mouse.x = event.x;
   mouse.y = event.y;
-  for(let i = 0; i < 10; i++) {
-    particlesArray.push(new Particle());
-  }
+  // for(let i = 0; i < 10; i++) {
+  //   particlesArray.push(new Particle());
+  // }
 
 });
 
 
 class Particle {
   constructor() {
-    this.x = mouse.x;
-    this.y = mouse.y;
     this.size = Math.random() * 17;
+    this.x = (Math.random() * (canvas.width - this.size)) + this.size;
+    this.y = (Math.random() * (canvas.height - this.size)) + this.size;
     this.speedX = Math.random() * 3 - 1.5;
     this.speedY = Math.random() * 3 -1.5;
     this.color = `hsl(${hue}, 100%, 50%)`
@@ -41,7 +41,7 @@ class Particle {
   update() {
     this.x += this.speedX;
     this.y += this.speedY;
-    if(this.size > 0.2) this.size -= 0.1;
+    // if(this.size > 0.2) this.size -= 0.1;
   }
   draw() {
     ctx.fillStyle = this.color;
@@ -90,7 +90,7 @@ function animate() {
   hue += 2;
   requestAnimationFrame(animate);
 }
-
+init();
 animate();
 
 
