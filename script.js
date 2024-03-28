@@ -32,16 +32,23 @@ canvas.addEventListener('mousemove', (event) => {
 class Particle {
   constructor() {
     this.size = Math.random() * 17;
-    this.x = (Math.random() * (canvas.width - this.size)) + this.size;
-    this.y = (Math.random() * (canvas.height - this.size)) + this.size;
+    this.x = (Math.random() * (canvas.width - (this.size + 20))) + this.size;
+    this.y = (Math.random() * (canvas.height - (this.size + 20))) + this.size;
     this.speedX = Math.random() * 3 - 1.5;
     this.speedY = Math.random() * 3 -1.5;
     this.color = `hsl(${hue}, 100%, 50%)`
   }
   update() {
+    if(this.x <= 0 + this.size 
+      || this.x >= canvas.width - this.size) {
+      this.speedX = this.speedX * - 1;
+    }
+    if(this.y <= 0 + this.size 
+      || this.y >= canvas.height - this.size) {
+      this.speedY = this.speedY * - 1;
+    }
     this.x += this.speedX;
     this.y += this.speedY;
-    // if(this.size > 0.2) this.size -= 0.1;
   }
   draw() {
     ctx.fillStyle = this.color;
