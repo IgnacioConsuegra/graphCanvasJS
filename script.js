@@ -61,8 +61,8 @@ class Particle {
 function init() {
   for (let i = 0; i < 30; i++) {
     hue += 2;
-    const x = (Math.random() * canvas.width - 50) + 50;
-    const y = (Math.random() * canvas.height - 50) + 50;
+    const x = (Math.random() * canvas.width - 80) + 80;
+    const y = (Math.random() * canvas.height - 80) + 80;
     particlesArray.push(new Particle(x, y));
   }
 }
