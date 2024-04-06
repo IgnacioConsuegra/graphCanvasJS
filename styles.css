@@ -6,3 +6,10 @@
   top: 0;
   left: 0;
 }
+.input{
+  width: 300px;
+  height: 300px;
+  position: fixed;
+  color: white;
+  /* background-color: red; */
+}

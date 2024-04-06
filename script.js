@@ -1,3 +1,5 @@
+import Tree from './tree.js';
+import Particle from './particle.js';
 const canvas = document.getElementById("canvas1");
 const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
@@ -8,7 +10,9 @@ const particlesArray = [];
 //This arr below is used to align our particles.
 const particlesLeftAndRightPositions = [];
 
-let hue = 0;
+let myTree = new Tree();
+
+let hue = 100;
 const middleX = canvas.width / 2;
 const middleY = canvas.height;
 
@@ -20,97 +24,8 @@ const LEFTEST_RIGHT_POSSIBLE = (middleX) + (NODES_SIZE * 3);
 
 
 
-class Particle {
-  constructor(
-    positionX = 100, 
-    positionY = 100,
-    nodeSize = 50,
-    parent = null,
-    depth = 0,
-    ) {
-    this.x = positionX;
-    this.y = positionY;
-    this.size = nodeSize;
-    this.color = `hsl(${hue}, 100%, 50%)`;
-    this.left = null;
-    this.right = null;
-    this.isFromLeftRoot = false;
-    this.isFromRightRoot = false;
-    this.parent = parent;
-    this.depth = depth;
-  }
-  update() {
-    // this.x += this.speedX;
-    // this.y += this.speedY;
-    // if(this.size > 0.2) this.size -= 0.1;
-  }
-  draw() {
-    ctx.fillStyle = this.color;
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-    ctx.fill();
-  }
-}
-class Tree{
-  constructor(){
-    this.root = null;
-    this.length = 0;
-    this.items = new Map();
-    //This items queue i'll using it to add nodes, that all.
-    this.itemsQueue = [];
-    // this.rightestLeftRoot = -Infinity;
-    // this.leftestRightRoot = +Infinity;
-  }
-  add(node) {
-    const root = this.root;
-    if(root !== null) {
-      const nodeToPush = this.itemsQueue[0];
-      if(nodeToPush.left === null) {
-        nodeToPush.left = node;
-        this.items.set(`${this.length}${node.size}`, node);
-        this.itemsQueue.push(node);
-        this.length++;
-        // this.proveRightOrLeftest(node)
-        return;
-      }
-      if(nodeToPush.right === null) {
-        nodeToPush.right = node;
-        this.items.set(`${this.length}${node.size}`, node);
-        this.itemsQueue.push(node);
-        this.itemsQueue.shift();
-        // this.proveRightOrLeftest(node)
-        this.length++;
-      }
-    } else {
-      this.root = node;
-      this.items.set(`${this.length}${node.size}`, node);
-      this.itemsQueue.push(node);
-      this.length++;
-    }
-  }
-  delete(node) {
-    const toDelete = this.items.get(node);
-    if(toDelete) {
-      return node;
-    }
-  }
-  // proveRightOrLeftest(node) {
-  //   if(node.isFromLeftRoot) {
-  //     if(this.rightestLeftRoot < node.x) {
-  //       this.rightestLeftRoot = node.x;
-  //     }
-  //   }
-  //   if(node.isFromRightRoot) {
-  //     if(this.leftestRightRoot > node.x) {
-  //       this.leftestRightRoot = node.x;
-  //     }
-  //   }
-  // }
-  breathFirst(){
-    return;
-  }
-}
-const myTree = new Tree();
+
+
 function handleParticlesArrPosition(node){
   try{
     if(particlesLeftAndRightPositions.length - 1 < node.depth) {
@@ -240,10 +155,10 @@ function alignNodesPosition(){
     console.log(err)
   }
 }
-function init() {
-  for(let i = 0; i < 26; i++ ) {
+function init(nodesAmount = 0) {
+  for(let i = 0; i < nodesAmount; i++ ) {
     if(i === 0) {
-      const node = new Particle(middleX + 0, 100, NODES_SIZE);
+      const node = new Particle(middleX + 0, 100, NODES_SIZE, null, 0, hue, ctx);
       particlesArray.push(node);
       particlesLeftAndRightPositions.push([node]);
       myTree.add(node);
@@ -256,7 +171,9 @@ function init() {
         lastNode.y + NODES_HEIGHT_DISTANCE,
         NODES_SIZE,
         myTree.root,
-        1
+        1,
+        hue,
+        ctx,
       );
       left.isFromLeftRoot = true;
       particlesArray.push(left);
@@ -272,7 +189,9 @@ function init() {
         lastNode.y + NODES_HEIGHT_DISTANCE,
         NODES_SIZE,
         myTree.root,
-        1
+        1,
+        hue,
+        ctx,
         );
       right.isFromRightRoot = true;
       particlesArray.push(right);
@@ -289,6 +208,8 @@ function init() {
         NODES_SIZE,
         lastNode,
         lastNode.depth + 1,
+        hue,
+        ctx,
         );
       if(right.parent.isFromLeftRoot === true) {
         right.isFromLeftRoot = true;
@@ -306,7 +227,8 @@ function init() {
         NODES_SIZE,
         lastNode,
         lastNode.depth + 1,
-
+        hue,
+        ctx,
       );
       if(left.parent.isFromLeftRoot === true) {
         left.isFromLeftRoot = true;
@@ -318,11 +240,24 @@ function init() {
       myTree.add(left);
     }
   }
-  console.log(myTree);
-  console.log(particlesLeftAndRightPositions);
   alignNodesPosition();
 }
+function reset() {
+  while(particlesArray.length) {
+    particlesArray.pop();
+  }
+  while(particlesLeftAndRightPositions.length){
+    particlesLeftAndRightPositions.pop();
+  }
+  myTree = new Tree();
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+}
+function addNode(amount){
+  reset();
+  init(amount);
+  handleParticles();
+}
 function handleParticles() {
   for(let i = 0; i < particlesArray.length; i++) {
     particlesArray[i].draw();
@@ -353,7 +288,7 @@ function handleParticles() {
   }
 }
 function animate() {
-  // ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
   // handleParticles();
   // ctx.fillStyle = `rgba(0, 0, 0, 0.02)`;
   // ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -377,10 +312,11 @@ function animate() {
   ctx.fill();
   requestAnimationFrame(animate);
 }
-init();
-handleParticles();
 
-// animate();
+const nodesInput = document.getElementById("nodesInput");
+nodesInput.addEventListener('change', (e) => {
+  addNode(parseInt(e.target.value));
+})
 
 
 
