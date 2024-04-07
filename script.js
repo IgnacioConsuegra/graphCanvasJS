@@ -12,11 +12,12 @@ const particlesLeftAndRightPositions = [];
 
 let myTree = new Tree();
 
-let hue = 100;
+let hue = 0;
+let counter = 0;
 const middleX = canvas.width / 2;
 const middleY = canvas.height;
 
-const NODES_SIZE = 10;
+const NODES_SIZE = 15;
 const NODES_WIDTH_DISTANCE = 50;
 const NODES_HEIGHT_DISTANCE = 100;
 const RIGHTEST_lEFT_POSSIBLE = (middleX) - (NODES_SIZE * 3);
@@ -158,7 +159,8 @@ function alignNodesPosition(){
 function init(nodesAmount = 0) {
   for(let i = 0; i < nodesAmount; i++ ) {
     if(i === 0) {
-      const node = new Particle(middleX + 0, 100, NODES_SIZE, null, 0, hue, ctx);
+      const node = new Particle(middleX + 0, 100, NODES_SIZE, null, 0, hue, ctx, counter);
+      counter++;
       particlesArray.push(node);
       particlesLeftAndRightPositions.push([node]);
       myTree.add(node);
@@ -174,7 +176,9 @@ function init(nodesAmount = 0) {
         1,
         hue,
         ctx,
+        counter,
       );
+      counter++;
       left.isFromLeftRoot = true;
       particlesArray.push(left);
       myTree.add(left);
@@ -192,7 +196,9 @@ function init(nodesAmount = 0) {
         1,
         hue,
         ctx,
+        counter,
         );
+      counter++;
       right.isFromRightRoot = true;
       particlesArray.push(right);
       handleParticlesArrPosition(right);
@@ -210,7 +216,9 @@ function init(nodesAmount = 0) {
         lastNode.depth + 1,
         hue,
         ctx,
+        counter,
         );
+      counter++;
       if(right.parent.isFromLeftRoot === true) {
         right.isFromLeftRoot = true;
       } else {
@@ -229,7 +237,9 @@ function init(nodesAmount = 0) {
         lastNode.depth + 1,
         hue,
         ctx,
+        counter,
       );
+      counter++;
       if(left.parent.isFromLeftRoot === true) {
         left.isFromLeftRoot = true;
       } else {
@@ -243,6 +253,7 @@ function init(nodesAmount = 0) {
   alignNodesPosition();
 }
 function reset() {
+  counter = 0;
   while(particlesArray.length) {
     particlesArray.pop();
   }

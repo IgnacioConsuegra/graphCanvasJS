@@ -8,6 +8,7 @@ export default class Particle {
     depth = 0,
     hue = 0,
     ctx, 
+    number = 0,
     ) {
     this.x = positionX;
     this.y = positionY;
@@ -19,8 +20,10 @@ export default class Particle {
     this.isFromLeftRoot = false;
     this.isFromRightRoot = false;
     this.parent = parent;
-    this.depth = depth;
+    this.depth = depth; 
     this.#ctx = ctx;
+    this.#ctx.font = '20px Arial';
+    this.number = number;
   }
   update() {
     // this.x += this.speedX;
@@ -32,5 +35,9 @@ export default class Particle {
     this.#ctx.beginPath();
     this.#ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
     this.#ctx.fill();
+    this.#ctx.fillStyle = 'white';
+    this.#ctx.fillText(`${this.number}`, 
+    this.x - (this.size / 2) - 2,
+    this.y + ((this.size / 2)));
   }
 }
