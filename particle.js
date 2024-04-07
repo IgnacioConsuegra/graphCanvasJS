@@ -25,10 +25,15 @@ export default class Particle {
     this.#ctx.font = '20px Arial';
     this.number = number;
   }
-  update() {
-    // this.x += this.speedX;
-    // this.y += this.speedY;
-    // if(this.size > 0.2) this.size -= 0.1;
+  draw() {
+    this.#ctx.fillStyle = this.color;
+    this.#ctx.beginPath();
+    this.#ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    this.#ctx.fill();
+    this.#ctx.fillStyle = 'white';
+    this.#ctx.fillText(`${this.number}`, 
+    this.x - (this.size / 2) - 2,
+    this.y + ((this.size / 2)));
   }
   draw() {
     this.#ctx.fillStyle = this.color;
@@ -39,5 +44,13 @@ export default class Particle {
     this.#ctx.fillText(`${this.number}`, 
     this.x - (this.size / 2) - 2,
     this.y + ((this.size / 2)));
+  }
+  check() {
+    this.color = 'green';
+    this.draw();
+  }
+  visited() {
+    this.color = 'yellow';
+    this.draw()
   }
 }

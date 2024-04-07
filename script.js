@@ -298,36 +298,16 @@ function handleParticles() {
     }
   }
 }
-function animate() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  // handleParticles();
-  // ctx.fillStyle = `rgba(0, 0, 0, 0.02)`;
-  // ctx.fillRect(0, 0, canvas.width, canvas.height);
-  // handleParticles();
-  // hue += 2;
-  // ctx.fillStyle = 'white';
-  // ctx.beginPath();
-  // ctx.arc(100, 100, 50, 0, Math.PI * 2);
-  // ctx.fill();
 
- 
-  // ctx.moveTo(particlesArray[i].x, particlesArray[i].y);
-  // ctx.lineTo(particlesArray[j].x, particlesArray[j].y);
-  // ctx.stroke();
-  // ctx.closePath();
-
-
-  // ctx.fillStyle = 'white';
-  // ctx.beginPath();
-  ctx.arc(300, 100, 50, 0, Math.PI * 2);
-  ctx.fill();
-  requestAnimationFrame(animate);
-}
 
 const nodesInput = document.getElementById("nodesInput");
+const breathFirst = document.getElementById("breathFirst");
+const depthFirst = document.getElementById("depthFirst");
 nodesInput.addEventListener('change', (e) => {
   addNode(parseInt(e.target.value));
 })
+breathFirst.addEventListener('click', (e) => myTree.breadthFirst())
+depthFirst.addEventListener('click', (e) => myTree.depthFirst())
 
 
 
