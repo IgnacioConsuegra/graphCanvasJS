@@ -8,8 +8,10 @@ export class Graph{
     this.#ctx = ctx;
     this.graph = [];
     this.items = new Map();
+
     this.lastX = null;
     this.lastY = null;
+    this.lastNodeValue = null;
   }
   createGraph(){  
     for(let height = 0; height < this.height; height++){
@@ -109,13 +111,23 @@ export class Graph{
       const item = this.items.get(`${y}${x}`);
       this.lastY  = y;
       this.lastX = x;
-      if(item.value === NODE_VALUES.WALL) {
-        this.empty(y, x);
+      if(item === undefined){
+        console.log("Item undefined.")
         return;
       }
-      if(item.value === NODE_VALUES.EMPTY) {
-        this.wall(y, x);
-        return;
+      if(this.lastNodeValue === null) {
+        this.lastNodeValue = item.value;
+      }
+      if(this.lastNodeValue === item.value){
+        this.lastNodeValue = item.value
+        if(item.value === NODE_VALUES.WALL) {
+          this.empty(y, x);
+          return;
+        }
+        if(item.value === NODE_VALUES.EMPTY) {
+          this.wall(y, x);
+          return;
+        }
       }
     }
   }

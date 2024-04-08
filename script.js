@@ -32,7 +32,7 @@ canvas.addEventListener('click', (event) => {
 canvas.addEventListener('mousemove', (event) => {
   const {mouseX, mouseY} = getMousePosition(event);
   const {column, row} = getColumnAndRow(mouseY, mouseX);
-  // myGraph.handleMouseOver(column, row);
+  myGraph.handleMouseOver(column, row);
 });
 
 
