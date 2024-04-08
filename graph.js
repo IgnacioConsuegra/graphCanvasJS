@@ -8,6 +8,8 @@ export class Graph{
     this.#ctx = ctx;
     this.graph = [];
     this.items = new Map();
+    this.lastX = null;
+    this.lastY = null;
   }
   createGraph(){  
     for(let height = 0; height < this.height; height++){
@@ -54,10 +56,12 @@ export class Graph{
     item.draw();
   }
   empty(y, x){
+    console.log("Empty here : ");
     const item = this.items.get(`${y}${x}`);
-    item.color = NODE_COLOR.EMPTY
-    item.value = NODE_VALUES.EMPTY;
     item.lum = 100;
+    item.color = NODE_COLOR.EMPTY;
+    item.value = NODE_VALUES.EMPTY;
+    console.log(item);
     item.draw();
   }
   wall(y, x) {
@@ -87,5 +91,32 @@ export class Graph{
     item.lum = NODE_LUM;
     item.value = NODE_VALUES.PATH;
     item.draw();
+  }
+  handleClick(y, x){
+    const item = this.items.get(`${y}${x}`);
+    console.log(item.value);
+    if(item.value === NODE_VALUES.WALL) {
+      this.empty(y, x);
+      return;
+    }
+    if(item.value === NODE_VALUES.EMPTY) {
+      this.wall(y, x);
+      return;
+    }
+  }
+  handleMouseOver(y, x) {
+    if(y !== this.lastY || x !== this.lastX){
+      const item = this.items.get(`${y}${x}`);
+      this.lastY  = y;
+      this.lastX = x;
+      if(item.value === NODE_VALUES.WALL) {
+        this.empty(y, x);
+        return;
+      }
+      if(item.value === NODE_VALUES.EMPTY) {
+        this.wall(y, x);
+        return;
+      }
+    }
   }
 }

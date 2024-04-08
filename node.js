@@ -8,7 +8,7 @@ export class Node{
     width = NODE_WIDTH,
     height = NODE_HEIGHT,
     value = NODE_VALUES.EMPTY,
-    color = NODE_COLOR,
+    color,
     ctx,
   ){
     this.x = x;

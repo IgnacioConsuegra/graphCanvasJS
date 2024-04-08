@@ -1,5 +1,5 @@
 import {Graph} from './graph.js';
-import {GRAPH_HEIGHT, GRAPH_WIDTH} from './constants.js';
+import {GRAPH_HEIGHT, GRAPH_WIDTH, NODE_HEIGHT, NODE_WIDTH} from './constants.js';
 
 const canvas = document.getElementById("canvas1");
 const ctx = canvas.getContext('2d');
@@ -10,6 +10,32 @@ const mouse = {
   x : undefined,
   y : undefined
 }
+
+function getMousePosition(event){
+  const rect = canvas.getBoundingClientRect();
+  const mouseX = event.clientX - rect.left;
+  const mouseY = event.clientY - rect.top;
+  return {mouseX, mouseY};
+}
+function getColumnAndRow(mouseY, mouseX){
+  const column = Math.trunc(mouseY / NODE_HEIGHT);
+  const row = Math.trunc(mouseX / NODE_WIDTH);
+  return {column, row};
+}
+canvas.addEventListener('click', (event) => {
+  const {mouseX, mouseY} = getMousePosition(event);
+  const {column, row} = getColumnAndRow(mouseY, mouseX);
+  myGraph.handleClick(column, row);
+})
+
+
+canvas.addEventListener('mousemove', (event) => {
+  const {mouseX, mouseY} = getMousePosition(event);
+  const {column, row} = getColumnAndRow(mouseY, mouseX);
+  // myGraph.handleMouseOver(column, row);
+});
+
+
 myGraph.createGraph();
 myGraph.drawGraph();
 myGraph.init(0, 0);
