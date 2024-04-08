@@ -22,12 +22,17 @@ function getColumnAndRow(mouseY, mouseX){
   const row = Math.trunc(mouseX / NODE_WIDTH);
   return {column, row};
 }
-canvas.addEventListener('click', (event) => {
+
+canvas.addEventListener('mousedown', (event) => {
   const {mouseX, mouseY} = getMousePosition(event);
   const {column, row} = getColumnAndRow(mouseY, mouseX);
-  myGraph.handleClick(column, row);
+  myGraph.handleMouseDown(column, row);
 })
-
+canvas.addEventListener('mouseup', (event) => {
+  const {mouseX, mouseY} = getMousePosition(event);
+  const {column, row} = getColumnAndRow(mouseY, mouseX);
+  myGraph.handleMouseUp(column, row);
+})
 
 canvas.addEventListener('mousemove', (event) => {
   const {mouseX, mouseY} = getMousePosition(event);
@@ -35,16 +40,20 @@ canvas.addEventListener('mousemove', (event) => {
   myGraph.handleMouseOver(column, row);
 });
 
+document.addEventListener('keypress', (event) => {
+  const {key} = event;
+  if(key === 'b'){
+    myGraph.breathFirst();
+  }
+  if(key === 'a'){
+    myGraph.aStarSearch();
+  }
+})
 
 myGraph.createGraph();
 myGraph.drawGraph();
 myGraph.init(0, 0);
-myGraph.end(0, 1);
-myGraph.empty(0, 2);
-myGraph.wall(0, 3);
-myGraph.searching(0, 4);
-myGraph.searched(0, 5);
-myGraph.path(0, 6);
+myGraph.end(4, 11);
 
 
 

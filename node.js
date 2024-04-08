@@ -21,6 +21,19 @@ export class Node{
     this.lum = NODE_LUM;
     this.#ctx = ctx;
     this.fontSize = 20;
+    this.left = null;
+    this.right = null;
+    this.top = null;
+    this.bottom = null;
+    this.topLeft = null;
+    this.topRight = null;
+    this.bottomLeft = null;
+    this.bottomRight = null;
+    this.neighbors = null;
+    this.parent = null;
+    this.f = 0;
+    this.g = 0;
+    this.previous = null;
   }
   draw(){
     this.#ctx.fillStyle = `hsl(${this.color}, 100%, ${this.lum}%)`; 
