@@ -1,4 +1,5 @@
 import { Node } from "./node.js";
+import { getMousePosition } from "./script.js";
 import {NODE_WIDTH, NODE_HEIGHT, NODE_COLOR, NODE_VALUES, NODE_LUM} from './constants.js';
 export class Graph{
   #ctx;
@@ -15,6 +16,13 @@ export class Graph{
     this.lastX = null;
     this.lastY = null;
     this.lastNodeValue = null;
+
+
+    this.movingEndOrInit = false;
+    this.initOrEnd = null;
+    this.tempNode = null;
+    this.mouseX = null;
+    this.mouseY = null;
   }
   createGraph(){  
     for(let height = 0; height < this.height; height++){
@@ -36,7 +44,18 @@ export class Graph{
       this.graph.push(row);
     }
     this.bindNodes();
-    console.log(this.graph);
+    this.drawGraph();
+  }
+  clearGraph(){
+    for(let height = 0; height < this.height; height++){
+      for(let width = 0; width < this.width; width++){
+        const current  = this.graph[height][width].value;
+        if(current === NODE_VALUES.SEARCHING || current === NODE_VALUES.SEARCHED || current === NODE_VALUES.PATH){
+          this.empty(height, width);
+          console.log(this.graph);
+        }
+      }
+    }
   }
   bindNodes() {
     for (let i = 0; i < this.graph.length; i++) {
@@ -63,6 +82,10 @@ export class Graph{
       }
     }
   }
+  changeMousePosition(y, x){
+    this.mouseX = x;
+    this.mouseY = y;
+  }
   getNeighbors(node) {
     const {x, y, width, height, value, nodeId, color, lum, ctx, fontSize, parent, neighbors, f, g, previous, ...rest} = node;
     const filteredNeighbors = {};
@@ -71,7 +94,6 @@ export class Graph{
         filteredNeighbors[key] = rest[key];
       }
     }
-    console.log("Filtered neighbors : ", filteredNeighbors)
     return filteredNeighbors;
   }
 
@@ -105,6 +127,9 @@ export class Graph{
     item.lum = 100;
     item.color = NODE_COLOR.EMPTY;
     item.value = NODE_VALUES.EMPTY;
+    item.h = null;
+    item.g = null;
+    item.f = null;
     item.draw();
   }
   wall(y, x) {
@@ -172,13 +197,65 @@ export class Graph{
       }
     }
   }
+  handleInitOrEnd(item, y, x){
+    this.movingEndOrInit = true;
+    this.initOrEnd = item.value;
+    if(item === this.startNode){
+      this.startNode = null;
+    }else {
+      this.endNode = null;
+    }
+    let tNode = new Node(item.x, item.y, NODE_WIDTH, NODE_HEIGHT, item.value, item.color, this.#ctx);
+    this.tempNode = tNode;
+    this.tempNode.lum = NODE_LUM;
+    this.tempNode.value = item.value;
+    this.tempNode.color = item.color;
+    this.tempNode.draw();
+    this.moveEnds();
+    this.empty(y, x);
+  }
+  moveEnds(){
+    if(!this.movingEndOrInit){
+      return;
+    }
+    console.log("MOVING");
+    this.tempNode.x = this.mouseX - NODE_WIDTH / 2;
+    this.tempNode.y = this.mouseY - NODE_HEIGHT / 2;
+    this.drawGraph();
+    this.tempNode.draw();
+    setTimeout(() => {
+      this.moveEnds();
+    }, 1/40 * 1000);
+  };
   handleMouseDown(y, x) {
     const item = this.items.get(`${y}${x}`);
-    this.lastY  = y;
-    this.lastX = x;
     if(item === undefined){
       return;
     }
+    if(this.movingEndOrInit){
+      if(item === this.startNode || item === this.endNode){
+        return;
+      }
+      if(this.initOrEnd === NODE_VALUES.INIT){
+        this.startNode = item;
+        this.init(y, x);
+      }else{
+        this.endNode = item;
+        this.end(y, x);
+      }
+      this.initOrEnd = null;
+      this.movingEndOrInit = false;
+      this.tempNode = null;
+      this.drawGraph();
+      return;
+    }
+    if(item === this.startNode || item === this.endNode) {
+      this.handleInitOrEnd(item, y, x);
+      return;
+    }
+    this.lastY  = y;
+    this.lastX = x;
+    
     this.lastNodeValue = item.value;
     this.mousePress = true;
 
@@ -264,7 +341,6 @@ export class Graph{
           path.push(temp);
           temp = temp.previous;
         }
-        console.log(path);
         path.map((element) => {
           if (element["value"] === NODE_VALUES.INIT || element["value"] === NODE_VALUES.END) {
             return [];

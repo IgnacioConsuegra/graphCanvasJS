@@ -17,7 +17,7 @@ export class Node{
     this.height = height;
     this.value = value;
     this.nodeId = value;
-    this.color = NODE_COLOR.EMPTY;
+    this.color = color;
     this.lum = NODE_LUM;
     this.#ctx = ctx;
     this.fontSize = 20;

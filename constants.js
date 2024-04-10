@@ -1,5 +1,5 @@
-export const GRAPH_HEIGHT = 5;
-export const GRAPH_WIDTH = 12;
+export const GRAPH_HEIGHT = 10;
+export const GRAPH_WIDTH = 14;
 
 export const NODE_WIDTH = 100;
 export const NODE_HEIGHT = 100;

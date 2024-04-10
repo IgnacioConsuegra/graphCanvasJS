@@ -11,7 +11,7 @@ const mouse = {
   y : undefined
 }
 
-function getMousePosition(event){
+export function getMousePosition(event){
   const rect = canvas.getBoundingClientRect();
   const mouseX = event.clientX - rect.left;
   const mouseY = event.clientY - rect.top;
@@ -38,6 +38,7 @@ canvas.addEventListener('mousemove', (event) => {
   const {mouseX, mouseY} = getMousePosition(event);
   const {column, row} = getColumnAndRow(mouseY, mouseX);
   myGraph.handleMouseOver(column, row);
+  myGraph.changeMousePosition(mouseY, mouseX);
 });
 
 document.addEventListener('keypress', (event) => {
@@ -48,12 +49,14 @@ document.addEventListener('keypress', (event) => {
   if(key === 'a'){
     myGraph.aStarSearch();
   }
+  if(key === 'r'){
+    myGraph.clearGraph();
+  }
 })
 
 myGraph.createGraph();
-myGraph.drawGraph();
 myGraph.init(0, 0);
-myGraph.end(4, 11);
+myGraph.end(0, 2);
 
 
 
