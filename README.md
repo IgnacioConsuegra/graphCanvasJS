@@ -2,9 +2,11 @@ Hello, this repository contains projects I did to learn at least the basics of H
 
 Each branch contains a different project.
 
-There are 4 branches in total: main, personalThings, testTree, windowsBurble.
+There are 5 branches in total: main, personalThings, testTree, windowsBurble.
 
 main: Particle creation at mouse position.
+
+Graph: A basic graph, and AStart search, and breath first.
 
 personalThings: Interconnected nodes forming something similar to a graph.
 
