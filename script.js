@@ -22,6 +22,13 @@ function getColumnAndRow(mouseY, mouseX){
   const row = Math.trunc(mouseX / NODE_WIDTH);
   return {column, row};
 }
+window.addEventListener("resize", () => {
+  console.log("canvas resize", canvas.width, canvas.height);
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  myGraph.drawGraph();
+  console.log("canvas resize", canvas.width, canvas.height);
+})
 
 canvas.addEventListener('mousedown', (event) => {
   const {mouseX, mouseY} = getMousePosition(event);

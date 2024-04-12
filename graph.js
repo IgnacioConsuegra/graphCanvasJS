@@ -281,6 +281,7 @@ export class Graph{
   }
   
   async breathFirst(){
+    this.clearGraph();
     const queue = [];
     const visited = new Set();
 
@@ -321,6 +322,7 @@ export class Graph{
   }
   
   async aStarSearch() {
+    this.clearGraph();
     const openSet = [];
     const closedSet = [];
   
